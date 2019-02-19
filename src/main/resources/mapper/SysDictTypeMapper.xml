@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.project.dao.SysDictTypeDao">
+
+    <select id="get" resultType="SysDictType">
+        select b.id,b.code,b.name,b.del_flag,b.remark,b.create_user,b.create_date,b.update_user,b.update_date
+        from sys_dict_type b
+        where b.id =#{id}
+    </select>
+
+    <select id="getAll" resultType="SysDictType">
+        select b.id,b.code,b.name,b.del_flag,b.remark,b.create_user,b.create_date,b.update_user,b.update_date
+        from sys_dict_type b
+        <where>
+            <if test="id != null  and id != '' ">
+                and b.id= #{id}
+            </if>
+            <if test="code != null  and code != '' ">
+                and b.code= #{code}
+            </if>
+            <if test="name != null  and name != '' ">
+                and b.name= #{name}
+            </if>
+            <if test="delFlag != null  and delFlag != '' ">
+                and b.del_flag= #{delFlag}
+            </if>
+            <if test="remark != null  and remark != '' ">
+                and b.remark= #{remark}
+            </if>
+        </where>
+        <if test="orderByInfo != null and orderByInfo.length > 0">
+            <foreach collection="orderByInfo" item="order" open="order by "
+                     separator="," close="  ">
+                ${order}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getAllByPage" resultType="SysDictType">
+        select b.id,b.code,b.name,b.del_flag,b.remark,b.create_user,b.create_date,b.update_user,b.update_date
+        from sys_dict_type b
+        <where>
+          <if test="id != null  and id != '' ">
+              and b.id= #{id}
+          </if>
+          <if test="code != null  and code != '' ">
+              and b.code= #{code}
+          </if>
+          <if test="name != null  and name != '' ">
+              and b.name= #{name}
+          </if>
+          <if test="delFlag != null  and delFlag != '' ">
+              and b.del_flag= #{delFlag}
+          </if>
+            <if test="remark != null  and remark != '' ">
+                and b.remark= #{remark}
+            </if>
+        </where>
+        <if test="orderByInfo != null and orderByInfo.length > 0">
+            <foreach collection="orderByInfo" item="order" open="order by "
+                     separator="," close="  ">
+                ${order}
+            </foreach>
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="SysDictType">
+        INSERT INTO sys_dict_type (id,code,name,del_flag,remark,create_user,create_date,update_user,update_date)
+        VALUES (#{id},#{code},#{name},#{delFlag},#{remark},#{createUser},NOW(),#{createUser},NOW());
+    </insert>
+
+    <update id="update" parameterType="SysDictType">
+        update sys_dict_type
+        <set>
+            <if test="id != null  and id != '' ">
+                id= #{id},
+            </if>
+            <if test="code != null  and code != '' ">
+                code= #{code},
+            </if>
+            <if test="name != null  and name != '' ">
+                name= #{name},
+            </if>
+            <if test="delFlag != null  and delFlag != '' ">
+                del_flag= #{delFlag},
+            </if>
+            <if test="remark != null  and remark != '' ">
+                remark= #{remark},
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                update_user=#{updateUser},
+            </if>
+            update_date=NOW()
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.String">
+        delete from sys_dict_type where id=#{id}
+    </delete>
+
+    <select id="getAllSysDict" resultType="java.util.HashMap">
+        select sdt.code, sdi.value, sdi.show_val, sdi.sort
+        from "sys_dict_type" sdt
+        join "sys_dict_item" sdi
+        on sdt.id = sdi.type_id
+        where sdt.del_flag='0' and sdi.del_flag='0'
+    </select>
+
+</mapper>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.project.dao.SysMenuDao">
+
+    <select id="get" resultType="SysMenu">
+        select b.id,b.parent_id,b.menu_name,b.url,b.sort,b.flag,b.icon,b.type,b.partner_types,b.menu_id,b.menu_as,b.create_date,b.create_user,b.update_date,b.update_user
+        from sys_menu b
+        where b.id =#{id}
+    </select>
+
+    <select id="getAll" resultType="SysMenu">
+        select b.id,b.parent_id,b.menu_name,b.url,b.sort,b.flag,b.icon,b.type,b.partner_types,b.menu_id,b.menu_as
+        from sys_menu b
+        <where>
+
+          <if test="id != null  and id != '' ">
+              and b.id= #{id}
+          </if>
+          <if test="parentId != null  and parentId != '' ">
+              and b.parent_id= #{parentId}
+          </if>
+          <if test="menuName != null  and menuName != '' ">
+              and b.menu_name= #{menuName}
+          </if>
+          <if test="url != null  and url != '' ">
+              and b.url= #{url}
+          </if>
+          <if test="sort != null  and sort != '' ">
+              and b.sort= #{sort}
+          </if>
+          <if test="flag != null  and flag != '' ">
+              and b.flag= #{flag}
+          </if>
+          <if test="icon != null  and icon != '' ">
+              and b.icon= #{icon}
+          </if>
+          <if test="type != null  and type != '' ">
+              and b.type= #{type}
+          </if>
+          <if test="menuId != null  and menuId != '' ">
+              and b.menu_id= #{menuId}
+          </if>
+          <if test="menuAs != null  and menuAs != '' ">
+              and b.menu_as= #{menuAs}
+          </if>
+          <if test="isAll != null  and isAll == '0'.toString() ">
+              and (partner_types != '') IS true
+          </if>
+          <if test="partnerTypes != null  and partnerTypes != '' ">
+              and b.partner_types like concat('%', #{partnerTypes},'%')
+          </if>
+            <if test="partnerId != null and partnerId != '' ">
+                and (b.id in (select menu_id from sys_partner_menu where partner_id = #{partnerId}) or
+                COALESCE(b.partner_types,'') = '' )
+            </if>
+          <if test="roleIds != null and roleIds.length > 0">
+              and (
+              <foreach collection="roleIds" item="roleId"
+                       open="b.id in (select menu_id from sys_role_menu where role_id in ("
+                       separator="," close=" )) ">
+                  #{roleId}
+              </foreach>
+              or (b.partner_types = '') IS NOT false
+              )
+          </if>
+            <if test="ids != null and ids.length > 0">
+                <foreach collection="ids" item="mid"
+                         open="AND b.id in  ("
+                         separator="," close=" ) ">
+                    #{mid}
+                </foreach>
+            </if>
+        </where>
+        <if test="orderByInfo != null and orderByInfo.length > 0">
+            <foreach collection="orderByInfo" item="order" open="order by "
+                     separator="," close="  ">
+                ${order}
+            </foreach>
+        </if>
+    </select>
+    <select id="getAllByPage" resultType="SysMenu">
+        select b.id,b.parent_id,b.menu_name,b.url,b.sort,b.flag,b.icon,b.type,b.partner_types,b.menu_id,b.menu_as,b.create_date,b.create_user,b.update_date,b.update_user
+        from sys_menu b
+        <where>
+          <if test="id != null  and id != '' ">
+              and b.id= #{id}
+          </if>
+          <if test="parentId != null  and parentId != '' ">
+              and b.parent_id= #{parentId}
+          </if>
+          <if test="menuName != null  and menuName != '' ">
+              and b.menu_name= #{menuName}
+          </if>
+          <if test="url != null  and url != '' ">
+              and b.url= #{url}
+          </if>
+          <if test="sort != null  and sort != '' ">
+              and b.sort= #{sort}
+          </if>
+          <if test="flag != null  and flag != '' ">
+              and b.flag= #{flag}
+          </if>
+          <if test="icon != null  and icon != '' ">
+              and b.icon= #{icon}
+          </if>
+          <if test="type != null  and type != '' ">
+              and b.type= #{type}
+          </if>
+          <if test="menuId != null  and menuId != '' ">
+              and b.menu_id= #{menuId}
+          </if>
+          <if test="menuAs != null  and menuAs != '' ">
+              and b.menu_as= #{menuAs}
+          </if>
+          <!--<if test="partnerTypes != null  and partnerTypes != '' ">-->
+              <!--and b.partner_types like concat('%', #{partnerTypes},'%')-->
+          <!--</if>-->
+          <if test="partnerId != null and partnerId != '' ">
+              and ( (b.id in (select menu_id from sys_partner_menu where partner_id = #{partnerId})) or (b.partner_types = '' is not false) )
+          </if>
+        </where>
+        <if test="orderByInfo != null and orderByInfo.length > 0">
+            <foreach collection="orderByInfo" item="order" open="order by "
+                     separator="," close="  ">
+                ${order}
+            </foreach>
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="SysMenu">
+        INSERT INTO sys_menu (id,parent_id,menu_name,url,sort,flag,icon,type,partner_types,menu_id,menu_as,create_date,create_user,update_date,update_user)
+        VALUES (#{id},nullif(#{parentId},'0'),#{menuName},#{url},#{sort},#{flag},#{icon},#{type},#{partnerTypes},#{menuId},#{menuAs},NOW(),#{createUser},NOW(),#{createUser});
+    </insert>
+
+    <update id="update" parameterType="SysMenu">
+        update sys_menu
+        <set>
+            <if test="id != null  and id != '' ">
+                id= #{id},
+            </if>
+            <if test="parentId != null  and parentId != '' ">
+                parent_id= #{parentId},
+            </if>
+            <if test="menuName != null  and menuName != '' ">
+                menu_name= #{menuName},
+            </if>
+            <if test="menuId != null  and menuId != '' ">
+                menu_id= #{menuId},
+            </if>
+            <if test="url != null  and url != '' ">
+                url= #{url},
+            </if>
+            <if test="sort != null  and sort != '' ">
+                sort= #{sort},
+            </if>
+            <if test="flag != null  and flag != '' ">
+                flag= #{flag},
+            </if>
+            <if test="icon != null  and icon != '' ">
+                icon= #{icon},
+            </if>
+            <if test="type != null  and type != '' ">
+                type= #{type},
+            </if>
+            <if test="menuAs != null  and menuAs != '' ">
+                menu_as= #{menuAs},
+            </if>
+            <if test="partner_types != null  and partner_types != '' ">
+                partner_types= #{partnerTypes},
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                update_user=#{updateUser},
+            </if>
+            update_date=NOW()
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.String">
+        delete from sys_menu where id=#{id}
+    </delete>
+
+</mapper>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.project.dao.SysOperationLogDao">
+
+    <select id="get" resultType="SysOperationLog">
+        select b.id,b.op_user,b.op_type,b.effect_table_id,b.business_key,b.effect_table,b.effect_column,b.remark,b.create_date,b.create_user,b.update_date,b.update_user
+        from sys_operation_log b
+        where b.id =#{id}
+    </select>
+
+    <select id="getAll" resultType="SysOperationLog">
+        select b.id,b.op_user,b.op_type,b.effect_table_id,b.business_key,b.effect_table,b.effect_column,b.remark
+        from sys_operation_log b
+        <where>
+            <if test="id != null  and id != '' ">
+                and b.id= #{id}
+            </if>
+            <if test="opUser != null  and opUser != '' ">
+                and b.op_user= #{opUser}
+            </if>
+            <if test="opType != null  and opType != '' ">
+                and b.op_type= #{opType}
+            </if>
+            <if test="effectTableId != null  and effectTableId != '' ">
+                and b.effect_table_id= #{effectTableId}
+            </if>
+            <if test="businessKey != null  and businessKey != '' ">
+                and b.business_key= #{businessKey}
+            </if>
+            <if test="effectTable != null  and effectTable != '' ">
+                and b.effect_table= #{effectTable}
+            </if>
+            <if test="effectColumn != null  and effectColumn != '' ">
+                and b.effect_column= #{effectColumn}
+            </if>
+            <if test="remark != null  and remark != '' ">
+                and b.remark= #{remark}
+            </if>
+        </where>
+        <if test="orderByInfo != null and orderByInfo.length > 0">
+            <foreach collection="orderByInfo" item="order" open="order by "
+                     separator="," close="  ">
+                ${order}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getAllByPage" resultType="SysOperationLog">
+        select b.id,b.op_user,b.op_type,b.effect_table_id,b.business_key,b.effect_table,b.effect_column,b.remark,b.create_date,b.create_user,b.update_date,b.update_user
+        from sys_operation_log b
+        <where>
+          <if test="id != null  and id != '' ">
+              and b.id= #{id}
+          </if>
+          <if test="opUser != null  and opUser != '' ">
+              and b.op_user= #{opUser}
+          </if>
+          <if test="opType != null  and opType != '' ">
+              and b.op_type= #{opType}
+          </if>
+          <if test="effectTableId != null  and effectTableId != '' ">
+              and b.effect_table_id= #{effectTableId}
+          </if>
+          <if test="businessKey != null  and businessKey != '' ">
+              and b.business_key= #{businessKey}
+          </if>
+          <if test="effectTable != null  and effectTable != '' ">
+              and b.effect_table= #{effectTable}
+          </if>
+          <if test="effectColumn != null  and effectColumn != '' ">
+              and b.effect_column= #{effectColumn}
+          </if>
+          <if test="remark != null  and remark != '' ">
+              and b.remark= #{remark}
+          </if>
+        </where>
+        <if test="orderByInfo != null and orderByInfo.length > 0">
+            <foreach collection="orderByInfo" item="order" open="order by "
+                     separator="," close="  ">
+                ${order}
+            </foreach>
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="SysOperationLog">
+        INSERT INTO sys_operation_log (id,op_user,op_type,effect_table_id,business_key,effect_table,effect_column,remark,create_date,create_user,update_date,update_user)
+        VALUES (#{id},#{opUser},#{opType},#{effectTableId},#{businessKey},#{effectTable},#{effectColumn},#{remark},NOW(),#{createUser},NOW(),#{createUser});
+    </insert>
+
+    <update id="update" parameterType="SysOperationLog">
+        update sys_operation_log
+        <set>
+            <if test="id != null  and id != '' ">
+                id= #{id},
+            </if>
+            <if test="opUser != null  and opUser != '' ">
+                op_user= #{opUser},
+            </if>
+            <if test="opType != null  and opType != '' ">
+                op_type= #{opType},
+            </if>
+            <if test="effectTableId != null  and effectTableId != '' ">
+                effect_table_id= #{effectTableId},
+            </if>
+            <if test="businessKey != null  and businessKey != '' ">
+                business_key= #{businessKey},
+            </if>
+            <if test="effectTable != null  and effectTable != '' ">
+                effect_table= #{effectTable},
+            </if>
+            <if test="effectColumn != null  and effectColumn != '' ">
+                effect_column= #{effectColumn},
+            </if>
+            <if test="remark != null  and remark != '' ">
+                remark= #{remark},
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                update_user=#{updateUser},
+            </if>
+            update_date=NOW()
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.String">
+        delete from sys_operation_log where id=#{id}
+    </delete>
+
+</mapper>

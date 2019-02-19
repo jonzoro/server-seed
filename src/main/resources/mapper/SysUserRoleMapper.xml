@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.project.dao.SysUserRoleDao">
+
+    <select id="get" resultType="SysUserRole">
+        select b.id,b.partner_id,b.user_id,b.role_id,b.role_code,b.create_date,b.update_date,b.create_user,b.update_user
+        from sys_user_role b
+        where b.id =#{id}
+    </select>
+
+    <select id="getAll" resultType="SysUserRole">
+        select b.id,b.partner_id,b.user_id,b.role_id,b.role_code,b.create_date,b.update_date,b.create_user,b.update_user
+        from sys_user_role b
+        <where>
+            <if test="id != null  and id != '' ">
+                and b.id= #{id}
+            </if>
+            <if test="partnerId != null  and partnerId != '' ">
+                and b.partner_id= #{partnerId}
+            </if>
+            <if test="userId != null  and userId != '' ">
+                and b.user_id= #{userId}
+            </if>
+            <if test="roleId != null  and roleId != '' ">
+                and b.role_id= #{roleId}
+            </if>
+            <if test="roleCode != null  and roleCode != '' ">
+                and b.role_code= #{roleCode}
+            </if>
+        </where>
+        <if test="orderByInfo != null and orderByInfo.length > 0">
+            <foreach collection="orderByInfo" item="order" open="order by "
+                     separator="," close="  ">
+                ${order}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getAllByPage" resultType="SysUserRole">
+        select b.id,b.partner_id,b.user_id,b.role_id,b.role_code,b.create_date,b.update_date,b.create_user,b.update_user
+        from sys_user_role b
+        <where>
+            <if test="id != null  and id != '' ">
+                and b.id= #{id}
+            </if>
+            <if test="partnerId != null  and partnerId != '' ">
+                and b.partner_id= #{partnerId}
+            </if>
+            <if test="userId != null  and userId != '' ">
+                and b.user_id= #{userId}
+            </if>
+            <if test="roleId != null  and roleId != '' ">
+                and b.role_id= #{roleId}
+            </if>
+            <if test="roleCode != null  and roleCode != '' ">
+                and b.role_code= #{roleCode}
+            </if>
+        </where>
+        <if test="orderByInfo != null and orderByInfo.length > 0">
+            <foreach collection="orderByInfo" item="order" open="order by "
+                     separator="," close="  ">
+                ${order}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="findRoleNameByUserId" resultType="SysUserRole">
+        SELECT b.user_id, string_agg(c.role_name, ',') as roleName
+        FROM sys_user_role b
+        LEFT JOIN sys_role c ON b.role_id = c.id
+        <foreach collection="userIds" item="uid" open="where b.user_id in("
+                 separator="," close=")  ">
+            '${uid}'
+        </foreach>
+        group by b.user_id
+    </select>
+
+    <insert id="insert" parameterType="SysUserRole">
+        INSERT INTO sys_user_role (id,partner_id,user_id,role_id,role_code,create_date,update_date,create_user,update_user)
+        VALUES (#{id},#{partnerId},#{userId},#{roleId},#{roleCode},NOW(),NOW(),#{createUser},#{createUser});
+    </insert>
+
+    <update id="update" parameterType="SysUserRole">
+        update sys_user_role
+        <set>
+            <if test="id != null  and id != '' ">
+                id= #{id},
+            </if>
+            <if test="partnerId != null  and partnerId != '' ">
+                partner_id= #{partnerId},
+            </if>
+            <if test="userId != null  and userId != '' ">
+                user_id= #{userId},
+            </if>
+            <if test="roleId != null  and roleId != '' ">
+                role_id= #{roleId},
+            </if>
+            <if test="roleCode != null  and roleCode != '' ">
+                role_code= #{roleCode},
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                update_user=#{updateUser},
+            </if>
+            update_date=NOW()
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.String">
+        delete from sys_user_role where id=#{id}
+    </delete>
+
+    <delete id="deleteByUserId" parameterType="java.lang.String">
+        delete from sys_user_role where user_id=#{userId}
+    </delete>
+
+    <insert id="insertFast" parameterType="SysUserRole">
+        INSERT INTO sys_user_role
+        (id,partner_id,user_id,role_id,role_code,create_date,update_date,create_user,update_user)
+        VALUES
+        <foreach collection="sysUserRoleList" item="item" index="index" separator=",">
+        (#{item.id},#{item.partnerId},#{item.userId},#{item.roleId},#{item.roleCode},NOW(),NOW(),#{item.createUser},#{item.updateUser})
+        </foreach>
+    </insert>
+
+</mapper>

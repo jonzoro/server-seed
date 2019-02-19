@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.project.dao.SysPartnerDao">
+
+    <select id="get" resultType="SysPartner">
+        select b.id,b.channel_mark,b.partner_name,b.user_no,b.wallet_addr,b.open_flag,b.remark,b.partner_type,b.create_date,b.create_user,b.update_date,b.update_user
+        from sys_partner b
+        where b.id =#{id}
+    </select>
+
+    <select id="getByChannelMark" resultType="SysPartner">
+        select b.id,b.channel_mark,b.partner_name,b.user_no,b.wallet_addr,b.open_flag,b.remark,b.partner_type,b.create_date,b.create_user,b.update_date,b.update_user
+        from sys_partner b
+        where b.channel_mark =#{channelMark}
+    </select>
+
+    <select id="getAll" resultType="SysPartner">
+        select b.id,b.channel_mark,b.partner_name,b.user_no,b.wallet_addr,b.open_flag,b.remark,b.partner_type,b.create_date,b.create_user,b.update_date,b.update_user
+        from sys_partner b
+        <where>
+          <if test="id != null  and id != '' ">
+              and b.id= #{id}
+          </if>
+          <if test="channelMark != null  and channelMark != '' ">
+              and b.channel_mark= #{channelMark}
+          </if>
+          <if test="partnerName != null  and partnerName != '' ">
+              and b.partner_name= #{partnerName}
+          </if>
+          <if test="userNo != null  and userNo != '' ">
+              and b.user_no= #{userNo}
+          </if>
+          <if test="walletAddr != null  and walletAddr != '' ">
+              and b.wallet_addr= #{walletAddr}
+          </if>
+          <if test="openFlag != null  and openFlag != '' ">
+              and b.open_flag= #{openFlag}
+          </if>
+          <if test="remark != null  and remark != '' ">
+              and b.remark= #{remark}
+          </if>
+          <if test="partnerType != null  and partnerType != '' ">
+              and b.partner_type= #{partnerType}
+          </if>
+        </where>
+        <if test="orderByInfo != null and orderByInfo.length > 0">
+            <foreach collection="orderByInfo" item="order" open="order by "
+                     separator="," close="  ">
+                ${order}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getAllByPage" resultType="SysPartner">
+        select b.id,b.channel_mark,b.partner_name,b.user_no,b.wallet_addr,b.open_flag,b.remark,b.partner_type,b.create_date,b.create_user,b.update_date,b.update_user
+        from sys_partner b
+        <where>
+          <if test="id != null  and id != '' ">
+              and b.id= #{id}
+          </if>
+          <if test="channelMark != null  and channelMark != '' ">
+              and b.channel_mark= #{channelMark}
+          </if>
+          <if test="partnerName != null  and partnerName != '' ">
+              and b.partner_name= #{partnerName}
+          </if>
+          <if test="userNo != null  and userNo != '' ">
+              and b.user_no= #{userNo}
+          </if>
+          <if test="walletAddr != null  and walletAddr != '' ">
+              and b.wallet_addr= #{walletAddr}
+          </if>
+          <if test="openFlag != null  and openFlag != '' ">
+              and b.open_flag= #{openFlag}
+          </if>
+          <if test="remark != null  and remark != '' ">
+              and b.remark= #{remark}
+          </if>
+          <if test="partnerType != null  and partnerType != '' ">
+              and b.partner_type= #{partnerType}
+          </if>
+        </where>
+        <if test="orderByInfo != null and orderByInfo.length > 0">
+            <foreach collection="orderByInfo" item="order" open="order by "
+                     separator="," close="  ">
+                ${order}
+            </foreach>
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="SysPartner">
+        INSERT INTO sys_partner (id,channel_mark,partner_name,user_no,wallet_addr,open_flag,remark,partner_type,create_date,create_user,update_date,update_user)
+        VALUES (#{id},#{channelMark},#{partnerName},#{userNo},#{walletAddr},#{openFlag},#{remark},#{partnerType},NOW(),#{createUser},NOW(),#{createUser});
+    </insert>
+
+    <update id="update" parameterType="SysPartner">
+        update sys_partner
+        <set>
+            <if test="id != null  and id != '' ">
+                id= #{id},
+            </if>
+            <if test="channelMark != null  and channelMark != '' ">
+                channel_mark= #{channelMark},
+            </if>
+            <if test="partnerName != null  and partnerName != '' ">
+                partner_name= #{partnerName},
+            </if>
+            <if test="userNo != null  and userNo != '' ">
+                user_no= #{userNo},
+            </if>
+            <if test="walletAddr != null  and walletAddr != '' ">
+                wallet_addr= #{walletAddr},
+            </if>
+            <if test="openFlag != null  and openFlag != '' ">
+                open_flag= #{openFlag},
+            </if>
+            <if test="remark != null  and remark != '' ">
+                remark= #{remark},
+            </if>
+            <if test="partnerType != null  and partnerType != '' ">
+                partner_type= #{partnerType},
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                update_user=#{updateUser},
+            </if>
+            update_date=NOW()
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.String">
+        delete from sys_partner where id=#{id}
+    </delete>
+
+</mapper>

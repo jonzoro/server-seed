@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.project.dao.SysRoleDao">
+
+    <select id="get" resultType="SysRole">
+        select b.id,b.role_name,b.role_desc,b.channel_mark,b.create_date,b.create_user,b.update_date,b.update_user
+        from sys_role b
+        where b.id =#{id}
+    </select>
+
+    <select id="getAll" resultType="SysRole">
+        select b.id,b.role_name,b.role_desc,b.channel_mark,b.create_date,b.create_user,b.update_date,b.update_user
+        from sys_role b
+        <where>
+          <if test="id != null  and id != '' ">
+              and b.id= #{id}
+          </if>
+          <if test="roleName != null  and roleName != '' ">
+              and b.role_name= #{roleName}
+          </if>
+          <if test="roleDesc != null  and roleDesc != '' ">
+              and b.role_desc= #{roleDesc}
+          </if>
+          <if test="channelMark != null  and channelMark != '' ">
+              and b.channel_mark= #{channelMark}
+          </if>
+        </where>
+        <if test="orderByInfo != null and orderByInfo.length > 0">
+            <foreach collection="orderByInfo" item="order" open="order by "
+                     separator="," close="  ">
+                ${order}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getAllByPage" resultType="SysRole">
+        select b.id,b.role_name,b.role_desc,b.channel_mark,b.create_date,b.create_user,b.update_date,b.update_user
+        from sys_role b
+        <where>
+          <if test="id != null  and id != '' ">
+              and b.id= #{id}
+          </if>
+          <if test="roleName != null  and roleName != '' ">
+              and b.role_name= #{roleName}
+          </if>
+          <if test="roleDesc != null  and roleDesc != '' ">
+              and b.role_desc= #{roleDesc}
+          </if>
+          <if test="channelMark != null  and channelMark != '' ">
+              and b.channel_mark= #{channelMark}
+          </if>
+        </where>
+        <if test="orderByInfo != null and orderByInfo.length > 0">
+            <foreach collection="orderByInfo" item="order" open="order by "
+                     separator="," close="  ">
+                ${order}
+            </foreach>
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="SysRole">
+        INSERT INTO sys_role (id,role_name,role_desc,channel_mark,create_date,create_user,update_date,update_user)
+        VALUES (#{id},#{roleName},#{roleDesc},#{channelMark},NOW(),#{createUser},NOW(),#{createUser});
+    </insert>
+
+    <update id="update" parameterType="SysRole">
+        update sys_role
+        <set>
+            <if test="id != null  and id != '' ">
+                id= #{id},
+            </if>
+            <if test="roleName != null  and roleName != '' ">
+                role_name= #{roleName},
+            </if>
+            <if test="roleDesc != null  and roleDesc != '' ">
+                role_desc= #{roleDesc},
+            </if>
+            <if test="channelMark != null  and channelMark != '' ">
+                channel_mark= #{channelMark},
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                update_user=#{updateUser},
+            </if>
+            update_date=NOW()
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.String">
+        delete from sys_role where id=#{id}
+    </delete>
+
+</mapper>

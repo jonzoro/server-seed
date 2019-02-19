@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.project.dao.SysUserDao">
+
+    <select id="get" resultType="SysUser">
+        select b.id,b.username,b.init_pass,b.password,b.channel_mark,b.user_type,b.name,b.phone,b.email,b.open_flag,b.create_date,b.create_user,b.update_date,b.update_user
+        from sys_user b
+        where b.id =#{id}
+    </select>
+
+    <select id="getUser" resultType="SysUser">
+        select b.id,b.username,b.init_pass,b.password,b.channel_mark,b.user_type,b.name,b.phone,b.email,b.open_flag,b.create_date,b.create_user,b.update_date,b.update_user
+        from sys_user b
+        where b.channel_mark = #{channelMark}
+          and b.username = #{userName}
+    </select>
+
+    <select id="getAll" resultType="SysUser">
+        select b.id,b.username,b.channel_mark,b.user_type,b.name,b.phone,b.email,b.open_flag,b.create_date,b.create_user,b.update_date,b.update_user
+        from sys_user b
+        <where>
+            <if test="id != null  and id != '' ">
+                and b.id= #{id}
+            </if>
+            <if test="username != null  and username != '' ">
+                and b.username= #{username}
+            </if>
+            <if test="initPass != null  and initPass != '' ">
+                and b.init_pass= #{initPass}
+            </if>
+            <if test="password != null  and password != '' ">
+                and b.password= #{password}
+            </if>
+            <if test="channelMark != null  and channelMark != '' ">
+                and b.channel_mark= #{channelMark}
+            </if>
+            <if test="userType != null  and userType != '' ">
+                and b.user_type= #{userType}
+            </if>
+            <if test="name != null  and name != '' ">
+                and b.name= #{name}
+            </if>
+            <if test="phone != null  and phone != '' ">
+                and b.phone= #{phone}
+            </if>
+            <if test="email != null  and email != '' ">
+                and b.email= #{email}
+            </if>
+            <if test="openFlag != null  and openFlag != '' ">
+                and b.open_flag= #{openFlag}
+            </if>
+            <if test="userTypes != null  and userTypes.length > 0 ">
+                <foreach collection="userTypes" item="type" open="and b.user_type in("
+                         separator="," close=")  ">
+                    '${type}'
+                </foreach>
+            </if>
+        </where>
+        <if test="orderByInfo != null and orderByInfo.length > 0">
+            <foreach collection="orderByInfo" item="order" open="order by "
+                     separator="," close="  ">
+                ${order}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getAllByPage" resultType="SysUser">
+        select b.id,b.username,b.channel_mark,b.user_type,b.name,b.phone,b.email,b.open_flag,b.create_date,b.create_user,b.update_date,b.update_user
+        from sys_user b
+        <where>
+            <if test="id != null  and id != '' ">
+                and b.id= #{id}
+            </if>
+            <if test="username != null  and username != '' ">
+                and b.username= #{username}
+            </if>
+            <if test="initPass != null  and initPass != '' ">
+                and b.init_pass= #{initPass}
+            </if>
+            <if test="password != null  and password != '' ">
+                and b.password= #{password}
+            </if>
+            <if test="channelMark != null  and channelMark != '' ">
+                and b.channel_mark= #{channelMark}
+            </if>
+            <if test="userType != null  and userType != '' ">
+                and b.user_type= #{userType}
+            </if>
+            <if test="name != null  and name != '' ">
+                and b.name= #{name}
+            </if>
+            <if test="phone != null  and phone != '' ">
+                and b.phone= #{phone}
+            </if>
+            <if test="email != null  and email != '' ">
+                and b.email= #{email}
+            </if>
+            <if test="openFlag != null  and openFlag != '' ">
+                and b.open_flag= #{openFlag}
+            </if>
+            <if test="userTypes != null  and userTypes.length > 0 ">
+                <foreach collection="userTypes" item="type" open="and b.user_type in("
+                         separator="," close=")  ">
+                    '${type}'
+                </foreach>
+            </if>
+        </where>
+        <if test="orderByInfo != null and orderByInfo.length > 0">
+            <foreach collection="orderByInfo" item="order" open="order by "
+                     separator="," close="  ">
+                ${order}
+            </foreach>
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="SysUser">
+        INSERT INTO sys_user (id,username,init_pass,password,channel_mark,user_type,name,phone,email,open_flag,create_date,create_user,update_date,update_user)
+        VALUES (#{id},#{username},#{initPass},#{password},#{channelMark},#{userType},#{name},#{phone},#{email},#{openFlag},NOW(),#{createUser},NOW(),#{createUser});
+    </insert>
+
+    <update id="update" parameterType="SysUser">
+        update sys_user
+        <set>
+            <if test="id != null  and id != '' ">
+                id= #{id},
+            </if>
+            <if test="username != null  and username != '' ">
+                username= #{username},
+            </if>
+            <if test="initPass != null  and initPass != '' ">
+                init_pass= #{initPass},
+            </if>
+            <if test="password != null  and password != '' ">
+                password= #{password},
+            </if>
+            <if test="channelMark != null  and channelMark != '' ">
+                channel_mark= #{channelMark},
+            </if>
+            <if test="userType != null  and userType != '' ">
+                user_type= #{userType},
+            </if>
+            <if test="name != null  and name != '' ">
+                name= #{name},
+            </if>
+            <if test="phone != null  and phone != '' ">
+                phone= #{phone},
+            </if>
+            <if test="email != null  and email != '' ">
+                email= #{email},
+            </if>
+            <if test="openFlag != null  and openFlag != '' ">
+                open_flag= #{openFlag},
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                update_user=#{updateUser},
+            </if>
+            update_date=NOW()
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.String">
+        delete from sys_user where id=#{id}
+    </delete>
+
+    <select id="findRoleNameByUserIdByPage" parameterType="SysUser" resultType="SysUser">
+        SELECT
+        b."id",b.username,b.channel_mark,b."name",b.phone,b.email,b.open_flag,b.create_date,b.create_user,b.update_date,b.update_user,string_agg (r.role_name, ',') user_type
+        FROM
+        sys_user b
+        LEFT JOIN sys_user_role ur ON ur.user_id = b.id
+        LEFT JOIN sys_role r ON ur.role_id = r.id
+        <where>
+            <if test="id != null  and id != '' ">
+                and b.id= #{id}
+            </if>
+            <if test="username != null  and username != '' ">
+                and b.username= #{username}
+            </if>
+            <if test="initPass != null  and initPass != '' ">
+                and b.init_pass= #{initPass}
+            </if>
+            <if test="password != null  and password != '' ">
+                and b.password= #{password}
+            </if>
+            <if test="channelMark != null  and channelMark != '' ">
+                and b.channel_mark= #{channelMark}
+            </if>
+            <if test="userType != null  and userType != '' ">
+                and b.user_type= #{userType}
+            </if>
+            <if test="name != null  and name != '' ">
+                and b.name= #{name}
+            </if>
+            <if test="phone != null  and phone != '' ">
+                and b.phone= #{phone}
+            </if>
+            <if test="email != null  and email != '' ">
+                and b.email= #{email}
+            </if>
+            <if test="openFlag != null  and openFlag != '' ">
+                and b.open_flag= #{openFlag}
+            </if>
+            <if test="userTypes != null  and userTypes.length > 0 ">
+                <foreach collection="userTypes" item="type" open="and b.user_type in("
+                         separator="," close=")  ">
+                    '${type}'
+                </foreach>
+            </if>
+        </where>
+        group by b.id
+        <if test="orderByInfo != null and orderByInfo.length > 0">
+            <foreach collection="orderByInfo" item="order" open="order by "
+                     separator="," close="  ">
+                ${order}
+            </foreach>
+        </if>
+
+    </select>
+
+</mapper>
