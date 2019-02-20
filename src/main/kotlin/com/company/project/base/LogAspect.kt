@@ -118,10 +118,9 @@ class LogAspect {
             val fields = arg.javaClass.declaredFields
             for (field in fields) {
                 if (null != field.getAnnotation(BusinessKey::class.java)) {
+                    field.isAccessible = true
                     val businessKey = field.getAnnotation(BusinessKey::class.java).remark
-                    val methodName  = "get" + field.name.capitalize()
-                    val method = arg.javaClass.getMethod(methodName)
-                    val businessKeyVal = method.invoke(arg).toString()
+                    val businessKeyVal = field.get(arg).toString()
                     result = "$businessKey:$businessKeyVal"
                     break
                 }
