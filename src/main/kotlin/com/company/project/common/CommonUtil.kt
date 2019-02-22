@@ -79,3 +79,25 @@ fun Base.toMap(vararg fields: String): MutableMap<String, Any?> {
     }
     return map
 }
+
+/***
+ * 获取两个实体类之间不同的属性及对应的值变化
+ */
+fun getDiff(before: Any, after: Any): List<Map<String, Any>> {
+    val diffList = mutableListOf<Map<String, Any>>()
+    val beforeClass = before.javaClass
+    // 类型相同但是值不一样的时候才进行比较
+    if (beforeClass.isInstance(after) && before != after) {
+        val fields = beforeClass.declaredFields
+        fields.forEach {
+            it.isAccessible = true
+            val name = it.name
+            val beforeVal = it.get(before)
+            val afterVal = it.get(after)
+            if (beforeVal != afterVal) {
+                diffList.add(mutableMapOf<String, Any>("name" to name, "beforeVal" to beforeVal, "afterVal" to afterVal))
+            }
+        }
+    }
+    return diffList
+}
