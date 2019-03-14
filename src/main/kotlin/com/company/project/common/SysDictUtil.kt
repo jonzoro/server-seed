@@ -36,4 +36,20 @@ object SysDictUtil {
         return null
     }
 
+    /***
+     * 查询数据字典（不存在时返回传入值）
+     */
+    fun findDict(typeCode: String, itemCode: String): String {
+        val type = sysDict[typeCode]
+        var result = itemCode
+        if (null != type) {
+            for (item in type) {
+                if (itemCode == item["value"]) {
+                    result = item["showVal"].toString()
+                    break
+                }
+            }
+        }
+        return result
+    }
 }
