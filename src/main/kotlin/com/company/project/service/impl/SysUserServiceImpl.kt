@@ -7,7 +7,6 @@ import com.company.project.base.*
 import com.company.project.common.*
 import com.company.project.dao.SysUserDao
 import com.company.project.model.SysUser
-import com.company.project.service.ISysPartnerService
 import com.company.project.service.ISysUserRoleService
 import com.company.project.service.ISysUserService
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,8 +28,6 @@ class SysUserServiceImpl : ISysUserService {
 
     @Autowired
     lateinit var sysUserDao: SysUserDao
-    @Autowired
-    lateinit var sysPartnerService: ISysPartnerService
     @Autowired
     lateinit var sysUserRoleService: ISysUserRoleService
 
@@ -121,13 +118,7 @@ class SysUserServiceImpl : ISysUserService {
     }
 
     override fun login(channelMark: String, userName: String, password: String): Map<String, Any> {
-        val partner = sysPartnerService.getByChannelMark(channelMark)
-                ?: throw CustomizeException(message = "合作方不存在。")
-        if (partner.openFlag != "1") {
-            throw CustomizeException(message = "该合作方已被禁用，请联系管理员。")
-        }
-        val user = sysUserDao.getUser(channelMark, userName)
-                ?: throw CustomizeException(message = "该用户不存在。")
+        val user = sysUserDao.getUser(channelMark, userName) ?: throw CustomizeException(message = "该用户不存在。")
         if (!user.password.equals(MessageDigestUtil.md5Pass(password), true)) {
             throw CustomizeException(message = "密码错误。")
         }
@@ -135,9 +126,6 @@ class SysUserServiceImpl : ISysUserService {
             throw CustomizeException(message = "该用户已被禁用，请联系管理员。")
         }
         val token = getUserToken(user)
-
-        user.partner = partner
-
         return mapOf( "token" to token )
     }
 
@@ -158,11 +146,7 @@ class SysUserServiceImpl : ISysUserService {
             // 验证 token
             val jwtVerifier = JWT.require(Algorithm.HMAC256(Constant.ENCRYPT_SALT)).build()
             jwtVerifier.verify(token)
-            val sysUser = getSysUser(userId)
-            val partner = sysPartnerService.getByChannelMark(sysUser.channelMark)
-                    ?: throw CustomizeException(message = "合作方不存在。")
-            sysUser.partner = partner
-            return sysUser
+            return getSysUser(userId)
         } catch (e: Exception) {
             throw  AuthException()
         }

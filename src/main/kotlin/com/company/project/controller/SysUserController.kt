@@ -94,9 +94,6 @@ class SysUserController {
         val data = user.toMap("id", "username", "channelMark", "name", "phone", "email", "userType")
         val menuList = sysMenuToMapList(sysMenuService.getAllSysMenuByUser(user))
         data["menuList"] = menuList
-        user.partner?.apply {
-            data["partner"] = this.toMap("id", "channelMark", "partnerName", "partnerType")
-        }
         return success(data)
     }
 

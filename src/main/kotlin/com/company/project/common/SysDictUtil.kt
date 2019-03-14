@@ -1,7 +1,5 @@
 package com.company.project.common
 
-import com.company.project.model.SysPartner
-
 object SysDictUtil {
 
     var sysDict: MutableMap<String, List<Map<String, String?>>> = mutableMapOf()
@@ -10,34 +8,6 @@ object SysDictUtil {
         val result = mutableMapOf<String, List<Map<String, String?>>>()
         keys.forEach { sysDict[it]?.apply { result[it] = this } }
         return result
-    }
-
-    fun updateSysPartner(sysPartner: SysPartner) {
-        sysDict["partner"]?.apply {
-            SysDictUtil.sysDict["partner"] = this.map {
-                if (it["value"] == sysPartner.channelMark) {
-                    mapOf(
-                            "value" to sysPartner.channelMark,
-                            "showVal" to sysPartner.partnerName,
-                            "openFlag" to sysPartner.openFlag
-                    )
-                } else {
-                    it
-                }
-            }
-        }
-    }
-
-    fun addSysPartner(sysPartner: SysPartner) {
-        sysDict["partner"]?.apply {
-            val list = this.toMutableList()
-            list.add(mapOf(
-                    "value" to sysPartner.channelMark,
-                    "showVal" to sysPartner.partnerName,
-                    "openFlag" to sysPartner.openFlag
-            ))
-            SysDictUtil.sysDict["partner"] = list
-        }
     }
 
     fun initDict(sysDictTypes: List<Map<String, String>>) {
@@ -55,16 +25,6 @@ object SysDictUtil {
         }
     }
 
-    fun initPartner(partners: List<SysPartner>) {
-        sysDict["partner"] = partners.map {
-            mapOf(
-                    "value" to it.channelMark,
-                    "showVal" to it.partnerName,
-                    "openFlag" to it.openFlag
-            )
-        }
-    }
-
     fun findType(typeCode: String, itemCode: String): String? {
         sysDict[typeCode]?.apply {
             for (map in this) {
@@ -74,7 +34,6 @@ object SysDictUtil {
             }
         }
         return null
-
     }
 
 }

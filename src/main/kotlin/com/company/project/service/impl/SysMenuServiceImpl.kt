@@ -36,16 +36,10 @@ class SysMenuServiceImpl : ISysMenuService {
     }
 
     override fun getAllSysMenu(sysMenu: SysMenu): List<SysMenu> {
-        val user = getSessionUserOrThrow()
-        sysMenu.partnerId = if(user.isOwner()) "" else user.partner!!.id
-
         return sysMenuDao.getAll(sysMenu)
     }
 
     override fun getAllSysMenuByPage(sysMenu: SysMenu): Page<SysMenu> {
-        val user = getSessionUserOrThrow()
-        sysMenu.partnerId = if (user.isOwner()) "" else user.partner!!.id
-
         return sysMenuDao.getAllByPage(sysMenu)
     }
 
@@ -65,8 +59,6 @@ class SysMenuServiceImpl : ISysMenuService {
 
     override fun getAllSysMenuByUser(user: SysUser): List<SysMenu> {
         val menu = SysMenu()
-        menu.partnerId = if(user.isOwner()) "" else user.partner!!.id
-
         if (!user.isAdmin()) {
             val roleIds = sysUserRoleService.getAllSysUserRole(SysUserRole(userId = user.id)).map { it.roleId }.toTypedArray()
             menu.roleIds = roleIds

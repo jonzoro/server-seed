@@ -6,9 +6,7 @@ import com.company.project.base.loggerFor
 import com.company.project.common.SysDictUtil
 import com.company.project.dao.SysDictTypeDao
 import com.company.project.model.SysDictType
-import com.company.project.model.SysPartner
 import com.company.project.service.ISysDictTypeService
-import com.company.project.service.ISysPartnerService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -28,8 +26,6 @@ class SysDictTypeServiceImpl : ISysDictTypeService {
 
     @Autowired
     lateinit var sysDictTypeDao: SysDictTypeDao
-    @Autowired
-    lateinit var sysPartnerService: ISysPartnerService
 
     override fun getSysDictType(id: String): SysDictType {
         return sysDictTypeDao.get(id) ?: throw IdNotFoundException()
@@ -65,8 +61,6 @@ class SysDictTypeServiceImpl : ISysDictTypeService {
     override fun refreshCache() {
         val sysDictTypes = getAllSysDict()
         SysDictUtil.initDict(sysDictTypes)
-        val partners = sysPartnerService.getAllSysPartner(SysPartner())
-        SysDictUtil.initPartner(partners)
     }
 
 }

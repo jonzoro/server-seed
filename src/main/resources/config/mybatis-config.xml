@@ -49,15 +49,6 @@
         <setting name="defaultStatementTimeout" value="25000"/>
     </settings>
 
-    <typeAliases>
-        <typeAlias alias="SysPartner" type="com.company.project.model.SysPartner"/>
-        <typeAlias alias="SysUser" type="com.company.project.model.SysUser"/>
-        <typeAlias alias="SysMenu" type="com.company.project.model.SysMenu"/>
-        <typeAlias alias="SysRole" type="com.company.project.model.SysRole"/>
-        <typeAlias alias="SysRoleMenu" type="com.company.project.model.SysRoleMenu"/>
-        <typeAlias alias="SysUserRole" type="com.company.project.model.SysUserRole"/>
-    </typeAliases>
-
     <plugins>
         <plugin interceptor="com.company.project.base.InsertInterceptor"/>
         <plugin interceptor="com.company.project.base.PageInterceptor">

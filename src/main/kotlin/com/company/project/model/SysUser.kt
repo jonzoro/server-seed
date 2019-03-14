@@ -71,7 +71,6 @@ data class SysUser(
     }
 
     var userTypeName: String? = null
-    var partner: SysPartner? = null
     var userTypes: Array<String>? = null
 
     override fun verify() {
