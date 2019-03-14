@@ -3,13 +3,13 @@
 <mapper namespace="com.company.project.dao.SysRoleDao">
 
     <select id="get" resultType="SysRole">
-        select b.id,b.role_name,b.role_desc,b.channel_mark,b.create_date,b.create_user,b.update_date,b.update_user
+        select b.id,b.role_name,b.role_desc,b.create_date,b.create_user,b.update_date,b.update_user
         from sys_role b
         where b.id =#{id}
     </select>
 
     <select id="getAll" resultType="SysRole">
-        select b.id,b.role_name,b.role_desc,b.channel_mark,b.create_date,b.create_user,b.update_date,b.update_user
+        select b.id,b.role_name,b.role_desc,b.create_date,b.create_user,b.update_date,b.update_user
         from sys_role b
         <where>
           <if test="id != null  and id != '' ">
@@ -20,9 +20,6 @@
           </if>
           <if test="roleDesc != null  and roleDesc != '' ">
               and b.role_desc= #{roleDesc}
-          </if>
-          <if test="channelMark != null  and channelMark != '' ">
-              and b.channel_mark= #{channelMark}
           </if>
         </where>
         <if test="orderByInfo != null and orderByInfo.length > 0">
@@ -34,7 +31,7 @@
     </select>
 
     <select id="getAllByPage" resultType="SysRole">
-        select b.id,b.role_name,b.role_desc,b.channel_mark,b.create_date,b.create_user,b.update_date,b.update_user
+        select b.id,b.role_name,b.role_desc,b.create_date,b.create_user,b.update_date,b.update_user
         from sys_role b
         <where>
           <if test="id != null  and id != '' ">
@@ -46,9 +43,6 @@
           <if test="roleDesc != null  and roleDesc != '' ">
               and b.role_desc= #{roleDesc}
           </if>
-          <if test="channelMark != null  and channelMark != '' ">
-              and b.channel_mark= #{channelMark}
-          </if>
         </where>
         <if test="orderByInfo != null and orderByInfo.length > 0">
             <foreach collection="orderByInfo" item="order" open="order by "
@@ -59,8 +53,8 @@
     </select>
 
     <insert id="insert" parameterType="SysRole">
-        INSERT INTO sys_role (id,role_name,role_desc,channel_mark,create_date,create_user,update_date,update_user)
-        VALUES (#{id},#{roleName},#{roleDesc},#{channelMark},NOW(),#{createUser},NOW(),#{createUser});
+        INSERT INTO sys_role (id,role_name,role_desc,create_date,create_user,update_date,update_user)
+        VALUES (#{id},#{roleName},#{roleDesc},NOW(),#{createUser},NOW(),#{createUser});
     </insert>
 
     <update id="update" parameterType="SysRole">
@@ -74,9 +68,6 @@
             </if>
             <if test="roleDesc != null  and roleDesc != '' ">
                 role_desc= #{roleDesc},
-            </if>
-            <if test="channelMark != null  and channelMark != '' ">
-                channel_mark= #{channelMark},
             </if>
             <if test="updateUser != null and updateUser != ''">
                 update_user=#{updateUser},

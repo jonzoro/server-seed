@@ -3,20 +3,19 @@
 <mapper namespace="com.company.project.dao.SysUserDao">
 
     <select id="get" resultType="SysUser">
-        select b.id,b.username,b.init_pass,b.password,b.channel_mark,b.user_type,b.name,b.phone,b.email,b.open_flag,b.create_date,b.create_user,b.update_date,b.update_user
+        select b.id,b.username,b.init_pass,b.password,b.user_type,b.name,b.phone,b.email,b.open_flag,b.create_date,b.create_user,b.update_date,b.update_user
         from sys_user b
         where b.id =#{id}
     </select>
 
     <select id="getUser" resultType="SysUser">
-        select b.id,b.username,b.init_pass,b.password,b.channel_mark,b.user_type,b.name,b.phone,b.email,b.open_flag,b.create_date,b.create_user,b.update_date,b.update_user
+        select b.id,b.username,b.init_pass,b.password,b.user_type,b.name,b.phone,b.email,b.open_flag,b.create_date,b.create_user,b.update_date,b.update_user
         from sys_user b
-        where b.channel_mark = #{channelMark}
-          and b.username = #{userName}
+        where b.username = #{userName}
     </select>
 
     <select id="getAll" resultType="SysUser">
-        select b.id,b.username,b.channel_mark,b.user_type,b.name,b.phone,b.email,b.open_flag,b.create_date,b.create_user,b.update_date,b.update_user
+        select b.id,b.username,b.user_type,b.name,b.phone,b.email,b.open_flag,b.create_date,b.create_user,b.update_date,b.update_user
         from sys_user b
         <where>
             <if test="id != null  and id != '' ">
@@ -30,9 +29,6 @@
             </if>
             <if test="password != null  and password != '' ">
                 and b.password= #{password}
-            </if>
-            <if test="channelMark != null  and channelMark != '' ">
-                and b.channel_mark= #{channelMark}
             </if>
             <if test="userType != null  and userType != '' ">
                 and b.user_type= #{userType}
@@ -65,7 +61,7 @@
     </select>
 
     <select id="getAllByPage" resultType="SysUser">
-        select b.id,b.username,b.channel_mark,b.user_type,b.name,b.phone,b.email,b.open_flag,b.create_date,b.create_user,b.update_date,b.update_user
+        select b.id,b.username,b.user_type,b.name,b.phone,b.email,b.open_flag,b.create_date,b.create_user,b.update_date,b.update_user
         from sys_user b
         <where>
             <if test="id != null  and id != '' ">
@@ -79,9 +75,6 @@
             </if>
             <if test="password != null  and password != '' ">
                 and b.password= #{password}
-            </if>
-            <if test="channelMark != null  and channelMark != '' ">
-                and b.channel_mark= #{channelMark}
             </if>
             <if test="userType != null  and userType != '' ">
                 and b.user_type= #{userType}
@@ -114,8 +107,8 @@
     </select>
 
     <insert id="insert" parameterType="SysUser">
-        INSERT INTO sys_user (id,username,init_pass,password,channel_mark,user_type,name,phone,email,open_flag,create_date,create_user,update_date,update_user)
-        VALUES (#{id},#{username},#{initPass},#{password},#{channelMark},#{userType},#{name},#{phone},#{email},#{openFlag},NOW(),#{createUser},NOW(),#{createUser});
+        INSERT INTO sys_user (id,username,init_pass,password,user_type,name,phone,email,open_flag,create_date,create_user,update_date,update_user)
+        VALUES (#{id},#{username},#{initPass},#{password},#{userType},#{name},#{phone},#{email},#{openFlag},NOW(),#{createUser},NOW(),#{createUser});
     </insert>
 
     <update id="update" parameterType="SysUser">
@@ -132,9 +125,6 @@
             </if>
             <if test="password != null  and password != '' ">
                 password= #{password},
-            </if>
-            <if test="channelMark != null  and channelMark != '' ">
-                channel_mark= #{channelMark},
             </if>
             <if test="userType != null  and userType != '' ">
                 user_type= #{userType},
@@ -165,7 +155,7 @@
 
     <select id="findRoleNameByUserIdByPage" parameterType="SysUser" resultType="SysUser">
         SELECT
-        b."id",b.username,b.channel_mark,b."name",b.phone,b.email,b.open_flag,b.create_date,b.create_user,b.update_date,b.update_user,string_agg (r.role_name, ',') user_type
+        b."id",b.username,b."name",b.phone,b.email,b.open_flag,b.create_date,b.create_user,b.update_date,b.update_user,string_agg (r.role_name, ',') user_type
         FROM
         sys_user b
         LEFT JOIN sys_user_role ur ON ur.user_id = b.id
@@ -182,9 +172,6 @@
             </if>
             <if test="password != null  and password != '' ">
                 and b.password= #{password}
-            </if>
-            <if test="channelMark != null  and channelMark != '' ">
-                and b.channel_mark= #{channelMark}
             </if>
             <if test="userType != null  and userType != '' ">
                 and b.user_type= #{userType}

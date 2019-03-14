@@ -37,25 +37,14 @@ class SysUserServiceImpl : ISysUserService {
     }
 
     override fun getAllSysUser(sysUser: SysUser): List<SysUser> {
-        val user = getSessionUserOrThrow()
-        if (!user.isOwner()) {
-            sysUser.channelMark = user.channelMark
-        }
         return sysUserDao.getAll(sysUser)
     }
 
     override fun getAllSysUserByPage(sysUser: SysUser): Page<SysUser> {
-        val user = getSessionUserOrThrow()
-        if (!user.isOwner()) {
-            sysUser.userType = "2"
-            sysUser.channelMark = user.channelMark
-        } else {
-            sysUser.userTypes = arrayOf("1", "2")
-        }
         val list = sysUserDao.getAllByPage(sysUser)
         if (list.isNotEmpty()) {
             val userRoleMap = sysUserRoleService.findRoleNameByUserId(list.map { it.id }.toTypedArray())
-                    .map { it.userId to it.roleName }.toMap()
+                .map { it.userId to it.roleName }.toMap()
 
             list.forEach {
                 it.userTypeName = SysDictUtil.findType("userType", it.userType)
@@ -68,23 +57,8 @@ class SysUserServiceImpl : ISysUserService {
     }
 
     override fun insertSysUser(sysUser: SysUser) {
-        val user = getSessionUserOrThrow()
-
-        if (sysUser.channelMark.isEmpty()) {
-            sysUser.channelMark = user.channelMark
-        }
-
-        if (sysUser.userType == "0" || sysUser.userType == "1") {//管理员账户
-            if (!user.isOwner()) {
-                throw CustomizeException(message = "权限不足，无法新增管理员")
-            }
-        }
         if (sysUser.initPass.isNotEmpty()) {
             sysUser.password = MessageDigestUtil.md5Pass(sysUser.initPass)
-        }
-
-        sysUserDao.getUser(sysUser.channelMark, sysUser.username)?.apply {
-            throw CustomizeException(message = "合作方【${sysUser.channelMark}】下用户名【${sysUser.username}】已存在")
         }
         sysUserDao.insert(sysUser)
     }
@@ -97,14 +71,6 @@ class SysUserServiceImpl : ISysUserService {
     }
 
     override fun deleteSysUser(id: String) {
-        val sysUser = getSysUser(id)
-        val user = getSessionUserOrThrow()
-
-        if (sysUser.userType == "0" || sysUser.userType == "1") {//管理员账户
-            if (!user.isOwner()) {
-                throw CustomizeException(message = "权限不足，无法删除管理员")
-            }
-        }
         sysUserDao.delete(id)
     }
 
@@ -117,8 +83,8 @@ class SysUserServiceImpl : ISysUserService {
         updateSysUser(SysUser(id = user.id, password = MessageDigestUtil.md5Pass(newPass)))
     }
 
-    override fun login(channelMark: String, userName: String, password: String): Map<String, Any> {
-        val user = sysUserDao.getUser(channelMark, userName) ?: throw CustomizeException(message = "该用户不存在。")
+    override fun login(userName: String, password: String): Map<String, Any> {
+        val user = sysUserDao.getUser(userName) ?: throw CustomizeException(message = "该用户不存在。")
         if (!user.password.equals(MessageDigestUtil.md5Pass(password), true)) {
             throw CustomizeException(message = "密码错误。")
         }
@@ -126,14 +92,13 @@ class SysUserServiceImpl : ISysUserService {
             throw CustomizeException(message = "该用户已被禁用，请联系管理员。")
         }
         val token = getUserToken(user)
-        return mapOf( "token" to token )
+        return mapOf("token" to token)
     }
 
     override fun getUserToken(user: SysUser): String {
-        //todo 后续需要处理下加密问题
         return JWT.create().withAudience(user.id)
-                .withIssuedAt(Date())
-                .sign(Algorithm.HMAC256(Constant.ENCRYPT_SALT))
+            .withIssuedAt(Date())
+            .sign(Algorithm.HMAC256(Constant.ENCRYPT_SALT))
     }
 
     override fun verifyUser(token: String?): SysUser {

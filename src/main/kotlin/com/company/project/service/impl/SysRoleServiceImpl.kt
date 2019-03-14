@@ -45,24 +45,11 @@ class SysRoleServiceImpl : ISysRoleService {
     }
 
     override fun getAllSysRole(sysRole: SysRole): List<SysRole> {
-        val user = getSessionUserOrThrow()
-        sysRole.channelMark = user.channelMark
-        if (user.isOwner()) {
-
-
-        }
         return sysRoleDao.getAll(sysRole)
     }
 
     override fun getAllSysRoleByUserId(userId: String): List<SysRole> {
-        val user = getSessionUserOrThrow()
-        val sysRole = SysRole(channelMark = user.channelMark)
-        if (user.isOwner()) {
-            val modUser = sysUserService.getSysUser(userId)
-            sysRole.channelMark = modUser.channelMark
-        }
-        val allRole = sysRoleDao.getAll(sysRole)
-
+        val allRole = sysRoleDao.getAll(SysRole())
         val userRoleIds = sysUserRoleService.getAllSysUserRole(SysUserRole(userId = userId)).map { it.roleId }
         allRole.forEach {
             it.selected = if (userRoleIds.contains(it.id)) "1" else "0"
@@ -72,14 +59,10 @@ class SysRoleServiceImpl : ISysRoleService {
 
 
     override fun getAllSysRoleByPage(sysRole: SysRole): Page<SysRole> {
-        val user = getSessionUserOrThrow()
-        sysRole.channelMark = user.channelMark
         return sysRoleDao.getAllByPage(sysRole)
     }
 
     override fun insertSysRole(sysRole: SysRole) {
-        val user = getSessionUserOrThrow()
-        sysRole.channelMark = user.channelMark
         sysRoleDao.insert(sysRole)
     }
 
@@ -88,10 +71,10 @@ class SysRoleServiceImpl : ISysRoleService {
     }
 
     override fun deleteSysRole(id: String): Int {
-       val data=sysRoleMenuService.queryRoleId(id)
-       if(data==0){
-           sysRoleDao.delete(id)
-       }
+        val data = sysRoleMenuService.queryRoleId(id)
+        if (data == 0) {
+            sysRoleDao.delete(id)
+        }
         return data
     }
 

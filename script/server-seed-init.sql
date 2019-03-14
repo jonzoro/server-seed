@@ -290,7 +290,6 @@ COMMIT;
 DROP TABLE IF EXISTS "sys_partner";
 CREATE TABLE "sys_partner" (
   "id" varchar(64) COLLATE "pg_catalog"."default" NOT NULL DEFAULT NULL::character varying,
-  "channel_mark" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "partner_name" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "user_no" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "wallet_addr" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
@@ -304,7 +303,6 @@ CREATE TABLE "sys_partner" (
 )
 ;
 COMMENT ON COLUMN "sys_partner"."id" IS '主键id';
-COMMENT ON COLUMN "sys_partner"."channel_mark" IS '渠道标识，字典表';
 COMMENT ON COLUMN "sys_partner"."partner_name" IS '合作方名称';
 COMMENT ON COLUMN "sys_partner"."user_no" IS '用户标识';
 COMMENT ON COLUMN "sys_partner"."wallet_addr" IS '钱包地址';
@@ -334,8 +332,7 @@ CREATE TABLE "sys_role" (
   "create_date" timestamptz(6) DEFAULT NULL::timestamp with time zone,
   "create_user" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "update_date" timestamptz(6) DEFAULT NULL::timestamp with time zone,
-  "update_user" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "channel_mark" varchar(40) COLLATE "pg_catalog"."default" NOT NULL DEFAULT NULL::character varying
+  "update_user" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying
 )
 ;
 COMMENT ON COLUMN "sys_role"."id" IS '主键id';
@@ -345,7 +342,6 @@ COMMENT ON COLUMN "sys_role"."create_date" IS '创建时间';
 COMMENT ON COLUMN "sys_role"."create_user" IS '创建人';
 COMMENT ON COLUMN "sys_role"."update_date" IS '修改时间';
 COMMENT ON COLUMN "sys_role"."update_user" IS '修改人';
-COMMENT ON COLUMN "sys_role"."channel_mark" IS '合作方表示';
 
 -- ----------------------------
 -- Records of sys_role
@@ -427,7 +423,6 @@ CREATE TABLE "sys_user" (
   "username" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "init_pass" varchar(200) COLLATE "pg_catalog"."default" NOT NULL DEFAULT NULL::character varying,
   "password" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "channel_mark" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "name" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "phone" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
   "email" varchar(200) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
@@ -443,7 +438,6 @@ COMMENT ON COLUMN "sys_user"."id" IS '主键id';
 COMMENT ON COLUMN "sys_user"."username" IS '用户名';
 COMMENT ON COLUMN "sys_user"."init_pass" IS '初始明文密码';
 COMMENT ON COLUMN "sys_user"."password" IS '密文密码';
-COMMENT ON COLUMN "sys_user"."channel_mark" IS '渠道标识';
 COMMENT ON COLUMN "sys_user"."name" IS '姓名';
 COMMENT ON COLUMN "sys_user"."phone" IS '手机号';
 COMMENT ON COLUMN "sys_user"."email" IS '邮箱';
@@ -516,11 +510,6 @@ ALTER TABLE "sys_dict_type" ADD CONSTRAINT "sys_dict_type_pkey" PRIMARY KEY ("id
 ALTER TABLE "sys_menu" ADD CONSTRAINT "sys_menu_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
--- Uniques structure for table sys_partner
--- ----------------------------
-ALTER TABLE "sys_partner" ADD CONSTRAINT "sys_partner_channel_mark_key" UNIQUE ("channel_mark");
-
--- ----------------------------
 -- Primary Key structure for table sys_partner
 -- ----------------------------
 ALTER TABLE "sys_partner" ADD CONSTRAINT "sys_partner_pkey" PRIMARY KEY ("id");
@@ -555,8 +544,3 @@ ALTER TABLE "sys_dict_item" ADD CONSTRAINT "fk_type_id" FOREIGN KEY ("type_id") 
 -- ----------------------------
 ALTER TABLE "sys_role_menu" ADD CONSTRAINT "fk_menu_id" FOREIGN KEY ("menu_id") REFERENCES "sys_menu" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "sys_role_menu" ADD CONSTRAINT "fk_role_id" FOREIGN KEY ("role_id") REFERENCES "sys_role" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- ----------------------------
--- Foreign Keys structure for table sys_user
--- ----------------------------
-ALTER TABLE "sys_user" ADD CONSTRAINT "fk_channel_mark" FOREIGN KEY ("channel_mark") REFERENCES "sys_partner" ("channel_mark") ON DELETE NO ACTION ON UPDATE NO ACTION;

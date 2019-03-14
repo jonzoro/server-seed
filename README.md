@@ -20,7 +20,3 @@
 
 #### 异常处理
 - com.company.project.base.Exception 中定义了 AuthException（用户验证异常）和 ParamException（参数异常）,加入了全局异常处理
-
-#### 业务
-- 业务表中需要定义 channelMark (渠道标识，如mini)字段，其中 owner 本身也是一个合作方，在业务中做特殊处理，拥有最高权限
-- SysUser 中有 userType 字段，0超级管理员用户 1合作方管理员 2普通用户，管理员通过合作方类型过滤权限，普通用户通过用户所属角色读取权限

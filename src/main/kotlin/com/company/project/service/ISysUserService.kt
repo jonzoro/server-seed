@@ -21,5 +21,5 @@ interface ISysUserService : IBaseService {
     fun getUserToken(user: SysUser): String
     fun verifyUser(token: String?): SysUser
     fun changePass(oldPass: String, newPass: String)
-    fun login(channelMark: String, userName: String, password: String): Map<String, Any>
+    fun login(userName: String, password: String): Map<String, Any>
 }

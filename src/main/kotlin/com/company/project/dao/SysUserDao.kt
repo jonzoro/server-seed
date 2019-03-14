@@ -12,6 +12,6 @@ import com.company.project.model.SysUser
  * @since 2018-12-25
  */
 interface SysUserDao : BaseMapper<SysUser> {
-    fun getUser(channelMark: String, userName: String): SysUser?
+    fun getUser(userName: String): SysUser?
     fun findRoleNameByUserIdByPage(sysUser:SysUser): Page<SysUser>
 }

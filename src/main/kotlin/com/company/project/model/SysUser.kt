@@ -33,11 +33,6 @@ data class SysUser(
         var password: String = "",
 
         /**
-         * 渠道标识
-         */
-        var channelMark: String = "",
-
-        /**
          * 姓名
          */
         var name: String = "",
@@ -57,7 +52,7 @@ data class SysUser(
          */
         var openFlag: String = "",
         /**
-         * 用户类型 0超级管理员用户 1合作方管理员，2普通用户
+         * 用户类型 0超级管理员用户 1外部管理员，2普通用户
          * 管理员用户只能由 owner 创建及删除
          */
         var userType: String = ""
@@ -81,10 +76,6 @@ data class SysUser(
         "邮箱 不能为空" using (email.isNotEmpty())
         "是否开启 不能为空" using (openFlag.isNotEmpty())
         userType = USER_TYPE_NORMAL
-    }
-
-    fun isOwner(): Boolean {
-        return Constant.OWNER == channelMark
     }
 
     fun isAdmin(): Boolean {

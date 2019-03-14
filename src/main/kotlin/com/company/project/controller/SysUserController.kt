@@ -80,10 +80,9 @@ class SysUserController {
     @PostMapping("/login")
     @ApiOperation(value = "用户登录")
     @IgnoreToken
-    fun login(@RequestParam channelMark: String,
-              @RequestParam userName: String,
+    fun login(@RequestParam userName: String,
               @RequestParam password: String): ResVal {
-        return success(sysUserService.login(channelMark, userName, password))
+        return success(sysUserService.login(userName, password))
     }
 
     @PostMapping("/userInfo")
@@ -91,7 +90,7 @@ class SysUserController {
     @VerifyToken
     fun userInfo(): ResVal {
         val user = getSessionUserOrThrow()
-        val data = user.toMap("id", "username", "channelMark", "name", "phone", "email", "userType")
+        val data = user.toMap("id", "username", "name", "phone", "email", "userType")
         val menuList = sysMenuToMapList(sysMenuService.getAllSysMenuByUser(user))
         data["menuList"] = menuList
         return success(data)
@@ -127,14 +126,7 @@ class SysUserController {
     @ApiOperation(value = "用户 数据字典")
     @VerifyToken
     fun dicSysUser(): ResVal {
-        val user = getSessionUserOrThrow()
-        return if (user.isOwner()) {
-            val dict = SysDictUtil.mapOf("partner", "userType", "openFlag")
-            dict["partner"] = dict["partner"]!!.filter { "1" == it["openFlag"] }
-            success(dict)
-        } else {
-            success(SysDictUtil.mapOf("userType", "openFlag"))
-        }
+        return success(SysDictUtil.mapOf("userType", "openFlag"))
     }
 
 
